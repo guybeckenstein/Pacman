@@ -11,5 +11,4 @@ Working with working directory and CMD input
 
 https://user-images.githubusercontent.com/82370205/149671769-87f197ad-be94-426d-ac77-f4052fb30473.mp4
 
-**Both load mode and silent load mode are for testing
-**
+** Both load mode and silent load mode are for testing **
