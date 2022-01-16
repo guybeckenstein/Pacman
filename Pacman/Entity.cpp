@@ -1,11 +1,11 @@
 #include "Entity.h"
+#include "ConsoleApp.h"
 #include "Game.h"
-#include "Menu.h"
 
 // Methods
 void Entity::eraseRender(bool colorAllowed, bool isBreadcrumbCoord, const Point& coord) const // Prints the original figure of the current coordinator - which is a breadcrumb or just a vacuum
 {
-	Menu::gotoxy(coord.getX(), coord.getY());
+	ConsoleApp::gotoxy(coord.getX(), coord.getY());
 	if (colorAllowed == true)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), valOf(colorConstants::BROWN));
 	if (isBreadcrumbCoord == true)
@@ -15,7 +15,7 @@ void Entity::eraseRender(bool colorAllowed, bool isBreadcrumbCoord, const Point&
 }
 void Entity::Print(bool colorAllowed, int figureColor) const // Prints the entity's render - in it's new coordinator
 {
-	Menu::gotoxy(getCoord().getX(), getCoord().getY());
+	ConsoleApp::gotoxy(getCoord().getX(), getCoord().getY());
 	if (colorAllowed == true)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), figureColor);
 	std::cout << *this << std::endl;
@@ -44,6 +44,7 @@ bool Entity::Move(const pair<Tunnel, Tunnel>& tunnels, const Board& board, bool 
 		setDirection(tmpDirection);
 	}
 	pointToUpdate.updateCoord(getDirection());
+	
 	setCoord(pointToUpdate);
 
 	return true; // Irrelevant

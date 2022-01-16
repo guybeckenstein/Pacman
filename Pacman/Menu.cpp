@@ -1,7 +1,8 @@
+#include "Menu.h"
 #include "BestGhost.h"
+#include "ConsoleApp.h"
 #include "Game.h"
 #include "GoodGhost.h"
-#include "Menu.h"
 #include "NoviceGhost.h"
 #include "Pacman.h"
 
@@ -23,7 +24,7 @@ void Menu::Run() // Initializes and runs the game completely
 			exitGame = true;
 		if (exitGame == false)
 		{
-			clearScreen();
+			ConsoleApp::clearScreen();
 			choice = mainMenu();
 		}
 	}
@@ -40,9 +41,9 @@ int Menu::mainMenu()
 	char choice = _getch();
 	while (choice != '1' && choice != '2' && choice != '8' && choice != '9')
 	{
-		gotoxy(0, 3);
+		ConsoleApp::gotoxy(0, 3);
 		std::cout << std::endl << std::endl << "Wrong number, choose one of the numbers above.";
-		gotoxy(0, 2);
+		ConsoleApp::gotoxy(0, 2);
 		choice = _getch();
 	}
 	return choice - '0';
@@ -50,7 +51,7 @@ int Menu::mainMenu()
 // Displays file loading menu. It is possible able to pick game difficulty level (default difficulty level is begginer = 1)
 void Menu::Load()
 {
-	clearScreen();
+	ConsoleApp::clearScreen();
 	std::cout << "You can choose whether you will select a screen to load, or all three screens will load automatically" << std::endl
 		<< "(1) Load screens automatically" << std::endl
 		<< "(2) Select a screen to load" << std::endl
@@ -64,7 +65,7 @@ void Menu::Load()
 		if (choice == '8')
 		{
 			difficultyLevel = getDifficultyLevel();
-			clearScreen();
+			ConsoleApp::clearScreen();
 			std::cout << "You can choose whether you will select a screen to load, or all three screens will load automatically" << std::endl
 				<< "(1) Load screens automatically" << std::endl
 				<< "(2) Select a screen to load" << std::endl
@@ -73,9 +74,9 @@ void Menu::Load()
 		}
 		else
 		{
-			gotoxy(0, 6);
+			ConsoleApp::gotoxy(0, 6);
 			std::cout << "Wrong number, choose the numbers above.";
-			gotoxy(0, 5);
+			ConsoleApp::gotoxy(0, 5);
 		}
 		choice = _getch();
 	}
@@ -84,12 +85,12 @@ void Menu::Load()
 	else if (choice == '2')
 		loadScreenByName(difficultyLevel);
 	else
-		pauseScreen();
+		ConsoleApp::pauseScreen();
 }
 // Returns the difficulty level that the user has picked
 int Menu::getDifficultyLevel()
 {
-	clearScreen();
+	ConsoleApp::clearScreen();
 	std::cout << "You can choose the difficulty level of the game. Default is begginer level" << std::endl
 		<< "If you finish game, you will need to change game difficulty level again to play in better levels" << std::endl
 		<< "(1) Begginer - Novice Ghosts" << std::endl
@@ -99,20 +100,20 @@ int Menu::getDifficultyLevel()
 	char choice = _getch();
 	while (choice != '1' && choice != '2' && choice != '3')
 	{
-		gotoxy(0, 6);
+		ConsoleApp::gotoxy(0, 6);
 		std::cout << "Wrong number, choose the numbers above.";
-		gotoxy(0, 5);
+		ConsoleApp::gotoxy(0, 5);
 		choice = _getch();
 	}
-	gotoxy(0, 8);
+	ConsoleApp::gotoxy(0, 8);
 	std::cout << "Initializing game difficulty level..." << std::endl;
-	pauseScreen();
+	ConsoleApp::pauseScreen();
 	return choice - '0';
 }
 // First, a Pac-Man's screen is loaded by user's choice, then the other screens are loaded (only screens which are lexicographically bigger than the first one)
 void Menu::loadScreenByName(int difficultyLevel)
 {
-	clearScreen();
+	ConsoleApp::clearScreen();
 	int screenIndex;
 	string name;
 	std::cout << "Enter screen name" << std::endl;
@@ -122,7 +123,7 @@ void Menu::loadScreenByName(int difficultyLevel)
 	else
 	{
 		std::cout << "Screen name does not exist." << std::endl;
-		pauseScreen();
+		ConsoleApp::pauseScreen();
 	}
 }
 void Menu::loadScreensAutomatically(int screenIndex, int difficultyLevel)
@@ -198,7 +199,7 @@ void Menu::loadScreensAutomatically(int screenIndex, int difficultyLevel)
 }
 void Menu::Results(int properScreens, int screenIndex, bool isWin, bool isQuit, int score)
 {
-	clearScreen();
+	ConsoleApp::clearScreen();
 	if (properScreens > 0)
 	{
 		if (screenIndex != valOf(pointConstants::TRASH))
@@ -240,7 +241,7 @@ void Menu::Results(int properScreens, int screenIndex, bool isWin, bool isQuit, 
 		std::cout << "Could not play." << std::endl;
 	}
 	std::cout << std::endl << "FINAL SCORE: " << score << " POINTS." << std::endl << std::endl;
-	pauseScreen();
+	ConsoleApp::pauseScreen();
 }
 bool Menu::isNameExist(const string& name, int& index)
 {
@@ -264,7 +265,7 @@ bool Menu::isNameExist(const string& name, int& index)
 }
 void Menu::Instructions() // Informs the player what the rules are
 {
-	clearScreen();
+	ConsoleApp::clearScreen();
 	std::cout << "The player controls Pac-Man ('@'), who must eat all the breadcrumbs dots ('.') inside an enclosed maze." << std::endl <<
 		"The player must avoid all ghosts ('$')." << std::endl << std::endl
 		<< "Game controls in the game are below:" << std::endl
@@ -272,38 +273,7 @@ void Menu::Instructions() // Informs the player what the rules are
 		<< "S - STAY in current position." << std::endl
 		<< "If you want to PAUSE game during playing, press ESC for PAUSE." << std::endl
 		<< "If you have changed your desired color, you can pick a new color again, through pressing (2) in menu." << std::endl << std::endl;
-	pauseScreen();
-}
-void Menu::pauseGame(const Point& legend, bool colorAllowed) // Player pressed "ESC" button -> game paused. If player will press "ESC" again, game will continue
-{
-	gotoxy(legend.getX(), legend.getY());
-	if (colorAllowed == true)
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), valOf(colorConstants::WHITE));
-	std::cout << "Game paused, pressin" << std::endl
-		<< "ESC again = continue" << std::endl;
-	char key = 0;
-	while (key != valOf(gameConstants::ESC))
-	{
-		if (_kbhit())
-		{
-			key = _getch();
-			if (key == valOf(gameConstants::ESC))
-			{
-				clearLegendArea(legend);
-				continue;
-			}
-		}
-	}
-}
-void Menu::clearLegendArea(const Point& legend)
-{
-	gotoxy(legend.getX(), legend.getY());
-	for (auto i = 0; i < valOf(boardConstants::LEGEND_MAX_HEIGHT); i++)
-	{
-		for (auto j = 0; j < valOf(boardConstants::LEGEND_MAX_WIDTH); j++)
-			std::cout << " ";
-		std::cout << std::endl;
-	}
+	ConsoleApp::pauseScreen();
 }
 // Operators
 const Menu& Menu::operator=(const Menu& menu)
@@ -316,22 +286,10 @@ const Menu& Menu::operator=(const Menu& menu)
 	}
 	return *this;
 }
-// We are expected to use gotoxy
-void Menu::gotoxy(int x, int y)
-{
-	HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
-	// Hides cursor
-	CONSOLE_CURSOR_INFO info = { 100, false };
-	SetConsoleCursorInfo(hConsoleOutput, &info);
-	COORD dwCursorPosition = { static_cast<short>(x), static_cast<short>(y) };
-	// Sets cursor position
-	std::cout << std::flush;
-	SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
-}
 // Bonus Methods
 bool Menu::colorScreen(bool isColorAllowed) // This function changes color settings of the game, if player decides to change it.
 {
-	clearScreen();
+	ConsoleApp::clearScreen();
 	bool newColorSettings;
 	if (isColorAllowed == true)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), valOf(colorConstants::WHITE));
@@ -342,12 +300,12 @@ bool Menu::colorScreen(bool isColorAllowed) // This function changes color setti
 	char choice = _getch();
 	while (choice != '0' && choice != '1')
 	{
-		gotoxy(0, 4);
+		ConsoleApp::gotoxy(0, 4);
 		std::cout << "Wrong number, choose the numbers above.";
-		gotoxy(0, 3);
+		ConsoleApp::gotoxy(0, 3);
 		choice = _getch();
 	}
-	gotoxy(0, 6);
+	ConsoleApp::gotoxy(0, 6);
 	if (choice == '0')
 	{
 		newColorSettings = false;
@@ -360,6 +318,6 @@ bool Menu::colorScreen(bool isColorAllowed) // This function changes color setti
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), valOf(colorConstants::WHITE));
 		std::cout << "Initializing color mode..." << std::endl;
 	}
-	pauseScreen();
+	ConsoleApp::pauseScreen();
 	return newColorSettings;
 }

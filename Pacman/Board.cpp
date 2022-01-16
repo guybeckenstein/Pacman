@@ -1,5 +1,5 @@
 #include "Board.h"
-#include "Menu.h"
+#include "ConsoleApp.h"
 #include "Pacman.h"
 
 // Setters
@@ -22,10 +22,10 @@ void Board::initializeBoard(const vector<string>& table, const Point& pacmanCoor
 					_table[y][x] = valOf(boardConstants::BLANK);
 	}
 	_totalBreadcrumbs = 0;
-	addBreadcrumbs(pacmanCoord);
+	initializeBreadcrumbs(pacmanCoord);
 }
 // Used when starting a screen. Adds breadcrumbs to all coordinators which are not '#', '%', or in the legend area
-void Board::addBreadcrumbs(const Point& pacmanCoord)
+void Board::initializeBreadcrumbs(const Point& pacmanCoord)
 {
 	vector<vector<Point>> legendArea(valOf(boardConstants::LEGEND_MAX_HEIGHT));
 	int x, y;
@@ -63,7 +63,7 @@ bool Board::isInLegendArea(int pointX, int pointY, const vector<vector<Point>>& 
 // Printing current board table, including breadcrumbs
 void Board::Print(bool colorAllowed) const
 {
-	Menu::gotoxy(0, 0);
+	ConsoleApp::gotoxy(0, 0);
 	for (auto y = 0; y < getHeight(); y++)
 	{
 		for (auto x = 0; x < getWidth(); x++)

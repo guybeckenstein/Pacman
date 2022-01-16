@@ -1,5 +1,7 @@
 #include "Pacman.h"
 #include "Game.h"
+#include "Menu.h"
+#include "ConsoleApp.h"
 
 // Setters
 void Pacman::setPacman(const Point& coord, const pair<Tunnel, Tunnel>& tunnels) // Used every move, when we seek to update Pac-Man's coordinator (also when he goes through the tunnels)
@@ -88,7 +90,7 @@ char Pacman::getArrowKeys(const Board& board, bool colorAllowed) // Returns the 
 		setFirstMove(true);
 		key = _getch();
 		if (key == valOf(gameConstants::ESC))
-			Menu::pauseGame(board.getLegend(), colorAllowed);
+			ConsoleApp::pauseGame(board.getLegend(), colorAllowed);
 	}
 	return key;
 }

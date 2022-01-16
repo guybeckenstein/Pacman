@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "ConsoleApp.h"
 
 const char* CLEAR = "                                              ";
 
@@ -27,7 +28,7 @@ Game::Game(const string& screenName, bool colorAllowed, bool& isValid, int diffi
 // Getters
 bool Game::isValidScreen(const string& name, vector<Point>& entities, vector<string>& currBoard)
 {
-	Menu::clearScreen();
+	ConsoleApp::clearScreen();
 	bool res = true, firstChar = false, illegalCharacter = false;
 	char firstCharLine = 0;
 	int height = 0, legendHeight = 0, width = 0, countPacman = 0, countGhosts = 0, countLegend = 0;
@@ -145,8 +146,8 @@ bool Game::isValidScreen(const string& name, vector<Point>& entities, vector<str
 			std::cout << "Screen file '" << name << "' is valid." << std::endl;
 	}
 	currFile.close();
-	Menu::pauseScreen();
-	Menu::clearScreen();
+	ConsoleApp::pauseScreen();
+	ConsoleApp::clearScreen();
 	return res;
 }
 bool Game::isLegendOnFirstLine(const string& string, int& width) const
@@ -236,44 +237,44 @@ bool Game::Play(Pacman& pacman, vector<Ghost*>& ghosts, int& lives, int& score, 
 		}
 	}
 	// End of loop -> means that the player has won or lost.
-	Menu::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY());
+	ConsoleApp::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY());
 	if (colorAllowed == true)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), valOf(colorConstants::WHITE));
 	if (pacman.getLives() == 0) // Player loses if the function returns true. It returns true only if Pac-Man's lives are 0
 	{
 		std::cout << "YOU LOST!" << std::endl;
-		Menu::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
+		ConsoleApp::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
 		std::cout << "Better luck next time." << std::endl;
 		Sleep(5 * valOf(gameConstants::GAME_SPEED));
-		Menu::clearScreen();
-		Menu::gotoxy(0, 0);
+		ConsoleApp::clearScreen();
+		ConsoleApp::gotoxy(0, 0);
 		std::cout << "YOU LOST!" << std::endl
 			<< "Better luck next time." << std::endl;
-		Menu::pauseScreen();
+		ConsoleApp::pauseScreen();
 	}
 	else if (_board.getNumberOfBreadcrumbs() == 0) // Player wins if the function returns true. It returns true only if Pac-Man's score is equal to 496
 	{
 		std::cout << "YOU WON!" << std::endl;
-		Menu::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
+		ConsoleApp::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
 		std::cout << "Congratulations." << std::endl;
 		Sleep(5 * valOf(gameConstants::GAME_SPEED));
-		Menu::clearScreen();
-		Menu::gotoxy(0, 0);
+		ConsoleApp::clearScreen();
+		ConsoleApp::gotoxy(0, 0);
 		std::cout << "YOU WON!" << std::endl
 			<< "Congratulations." << std::endl;
-		Menu::pauseScreen();
+		ConsoleApp::pauseScreen();
 	}
 	else
 	{
 		std::cout << "YOU QUIT!" << std::endl;
-		Menu::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
+		ConsoleApp::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
 		std::cout << "Never give up." << std::endl;
 		Sleep(5 * valOf(gameConstants::GAME_SPEED));
-		Menu::clearScreen();
-		Menu::gotoxy(0, 0);
+		ConsoleApp::clearScreen();
+		ConsoleApp::gotoxy(0, 0);
 		std::cout << "YOU QUIT!" << std::endl
 			<< "Never give up." << std::endl;
-		Menu::pauseScreen();
+		ConsoleApp::pauseScreen();
 	}
 
 	// Aftermath
@@ -289,7 +290,7 @@ bool Game::Move(Pacman& pacman, vector<Ghost*>& ghosts, int loopNumber, bool col
 		if (loopNumber % valOf(fruitConstants::FRUIT_TIMER) == 0 && loopNumber > 0)
 		{
 			int x = getFruit().getCoord().getX(), y = getFruit().getCoord().getY();
-			Menu::gotoxy(x, y);
+			ConsoleApp::gotoxy(x, y);
 			if (_board.isBreadcrumb(x, y))
 			{
 				if (colorAllowed == true)
@@ -349,11 +350,11 @@ bool Game::Move(Pacman& pacman, vector<Ghost*>& ghosts, int loopNumber, bool col
 }
 void Game::Print(int lives, int score, bool colorAllowed) // Function to display legend message
 {
-	Menu::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY());
+	ConsoleApp::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY());
 	if (colorAllowed == true)
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), valOf(colorConstants::WHITE));
 	std::cout << "LIVES: " << lives << std::endl;
-	Menu::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
+	ConsoleApp::gotoxy(getBoard().getLegend().getX(), getBoard().getLegend().getY() + 1);
 	std::cout << "SCORE: " << score;
 }
 void Game::Reset(Pacman& pacman, vector<Ghost*>& ghosts) // Used when initializing or resetting the game (when Pac-Man hits a ghost or when playing again)
@@ -370,7 +371,7 @@ void Game::Reset(Pacman& pacman, vector<Ghost*>& ghosts) // Used when initializi
 	// Fruit resetting
 	_fruit.Reset(_board, getEntities());
 	// Life status print resetting
-	Menu::clearLegendArea(getBoard().getLegend());
+	ConsoleApp::clearLegendArea(getBoard().getLegend());
 }
 // Collision Methods
 bool Game::pacmanGhostsCollision(Pacman& pacman, vector<Ghost*>& ghosts) // Function for every possible collision of Pac-Man and ghosts, returning true if there is.
@@ -403,7 +404,7 @@ bool Game::pacmanEatsFruit(Pacman& pacman, bool colorAllowed) // Checks if Pac-M
 	if (getFruit().getCoord() == Point(x, y))
 	{
 		// Prevents double figure printing
-		Menu::gotoxy(x, y);
+		ConsoleApp::gotoxy(x, y);
 		std::cout << valOf(boardConstants::BLANK) << std::endl;
 		// Prints Pac-Man
 		pacman.Print(colorAllowed, valOf(colorConstants::YELLOW));
@@ -432,7 +433,7 @@ bool Game::ghostsFruitCollision(vector<Ghost*>& ghosts, bool colorAllowed) // Ch
 		if (ghosts[i]->getCoord() == Point(x, y))
 		{
 			// Prevents double figure printing
-			Menu::gotoxy(x, y);
+			ConsoleApp::gotoxy(x, y);
 			if (_board.isBreadcrumb(x, y))
 			{
 				if (colorAllowed == true)

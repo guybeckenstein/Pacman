@@ -16,14 +16,15 @@ public:
 	// Getters
 	int getNumber() const { return _number; }
 	bool getVisibility() const { return _isVisible; }
-	// Setters
-	void setNumber() { _number = (rand() % valOf(fruitConstants::TOTAL_DIVISION_OPTIONS)) + valOf(fruitConstants::TOTAL_DIVISION_OPTIONS); }
-	void setVisibility(bool value) { _isVisible = value; }
 	// Methods
-	void Render(std::ostream& os) const override { os << getNumber(); }
 	void setStartingCoord(const Board& board, const vector<Point>& entities);
 	void makeFruitInvisibile();
-	void Reset(const Point& coord) override {} // Unused in Fruit class
-	void Reset(const Board& board, const vector<Point>& entities); // Not the same same as Entity::Reset
+	void Reset(const Board& board, const vector<Point>& entities);
+private:
+	// Setters
+	void setNumber() { _number = (rand() % valOf(fruitConstants::TOTAL_DIVISION_OPTIONS)) + valOf(fruitConstants::TOTAL_DIVISION_OPTIONS); }
+	// Methods
+	void Render(std::ostream& os) const override { os << getNumber(); }
+	void setVisibility(bool value) { _isVisible = value; }
 };
 
