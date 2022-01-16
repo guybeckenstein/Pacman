@@ -83,5 +83,8 @@
     <ClInclude Include="NoviceGhost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InputParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

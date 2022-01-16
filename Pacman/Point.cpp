@@ -17,14 +17,14 @@ const Point& Point::operator+(const Point& coord)
 	return *this;
 }
 // Methods
-void Point::updateCoord(int direction) // Updates the coordinator of the object (pacman and ghosts), changing it by one.
+void Point::updateCoord(Directions direction) // Updates the coordinator of the object (pacman and ghosts), changing it by one.
 {
-	if (direction == (unsigned int)pointConstants::UP) // UP
+	if (direction == Directions::UP)
 		setY(_y - 1);
-	else if (direction == (unsigned int)pointConstants::LEFT)
+	else if (direction == Directions::LEFT)
 		setX(_x - 1);
-	else if (direction == (unsigned int)pointConstants::DOWN)
+	else if (direction == Directions::DOWN)
 		setY(_y + 1);
-	else if (direction == (unsigned int)pointConstants::RIGHT)
+	else if (direction == Directions::RIGHT)
 		setX(_x + 1);
 }

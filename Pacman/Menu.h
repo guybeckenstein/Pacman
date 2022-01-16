@@ -14,18 +14,19 @@ class Menu
 {
 private:
 	vector<string> _screenNames;
-	bool _colorAllowed;
+	bool _colorAllowed; 
 public:
 	Menu(const vector<string>& screenNames) : _screenNames(screenNames), _colorAllowed(false) {}
 	Menu(const Menu& menu) { *this = menu; }
 	~Menu() { _screenNames.clear(); }
 	// Used Functions
-	void Run();
+	void Run(bool saveMode, bool loadMode, bool silentMode);
 	int mainMenu();
-	void Load();
+	void Start(bool saveMode);
 	int getDifficultyLevel();
-	void loadScreenByName(int difficultyLevel);
-	void loadScreensAutomatically(int screenIndex, int difficultyLevel); // starts from screenIndex
+	void loadScreenByName(bool saveMode, int difficultyLevel);
+	void loadScreensAutomatically(bool saveMode, int screenIndex, int difficultyLevel); // starts from screenIndex
+	void loadScreensLoadMode(bool silentMode);
 	void Results(int properScreens, int screenIndex, bool isWin, bool isQuit, int score = 0);
 	bool isNameExist(const string& name, int& index);
 	void Instructions();
@@ -43,5 +44,6 @@ public:
 	bool getColorSettings() { return _colorAllowed; }
 	void setColorSettings(bool value) { _colorAllowed = value; }
 	bool colorScreen(bool isColorAllowed);
+	static bool validName(const string& name, const string& type);
 };
 

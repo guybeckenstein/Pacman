@@ -1,6 +1,5 @@
 #pragma once
 
-#include <queue>
 #include "Board.h"
 #include "Ghost.h"
 
@@ -12,13 +11,14 @@ private:
 	Point _target;
 	bool _isBest;
 public:
-	GoodGhost(const Point& pacmanCoord, int x, int y, int movementFrequency = valOf(ghostConstants::MOVEMENT_FREQUENCY)) : _target(pacmanCoord), _isBest(true), Ghost(x,y, movementFrequency) {}
-	~GoodGhost() override {}; // No actual memory allocation
+	GoodGhost(const Point& pacmanCoord, int x, int y, int movementFrequency = static_cast<int>(ghostConstants::MOVEMENT_FREQUENCY)) : _target(pacmanCoord), _isBest(true), Ghost(x,y, movementFrequency) { }
+	// Destructor
+	~GoodGhost() override = default;
 	// Getters
 	const Point& getTargetCoord() const { return _target; }
 	bool getIsBest() const { return _isBest; }
 	// Setters
-	void setTargetCoord(const Point& coord) { _target = coord; }
+	bool setTargetCoord(const Point& coord) override { _target = coord; return getIsBest(); }
 	void setIsBest(bool isBest) { _isBest = isBest; }
 	// Movement Methods
 	bool Move(const pair<Tunnel, Tunnel>& tunnels, const Board& board, bool colorAllowed) override;
