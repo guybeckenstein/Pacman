@@ -12,8 +12,7 @@ private:
 	int _score;
 public:
 	// Constructors
-	Pacman(int startingX, int startingY, int movementFrequency = static_cast<int>(pacmanConstants::MOVEMENT_FREQUENCY), int lives = static_cast<int>(pacmanConstants::INIT_LIVES), int score = 0) : Entity(startingX, startingY, movementFrequency), _lives(lives), _score(score) { }
-	~Pacman() override = default;
+	Pacman(int startingX, int startingY, int movementFrequency = valOf(pacmanConstants::MOVEMENT_FREQUENCY), int lives = valOf(pacmanConstants::INIT_LIVES), int score = 0) : Entity(startingX, startingY, movementFrequency), _lives(lives), _score(score) { }
 	// Getters
 	int getLives() const { return _lives; }
 	int getScore() const { return _score; }
@@ -26,10 +25,10 @@ public:
 	// Movement Methods
 	bool Move(const pair<Tunnel, Tunnel>& tunnels, const Board& board, bool colorAllowed) override;
 	char getArrowKeys(const Board& board, bool colorAllowed);
-	bool getNextDirection(const pair<Tunnel, Tunnel>& tunnels, const Board& board, char key, Directions& nextDirection, bool& nextToTunnel);
+	bool getNextDirection(const pair<Tunnel, Tunnel>& tunnels, const Board& board, char key, int& nextDirection, bool& nextToTunnel);
 	bool checkForTunnels(const pair<Tunnel, Tunnel>& tunnels, const Board& board, char key);
 	// Reset / Reinitialize Methods
-	void Render(std::ostream& os) const override { os << static_cast<char>(pacmanConstants::FIGURE); }
+	void Render(std::ostream& os) const override { os << valOf(pacmanConstants::FIGURE); }
 	void Reset(const Point& coord) override;
 };
 

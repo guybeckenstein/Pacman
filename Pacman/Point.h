@@ -7,9 +7,9 @@
 #include <vector>
 #include <Windows.h>
 
-enum class Directions : int { UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3, STAY = 4, QUIT = 6, TRASH = -1 };
-//template <class T>
-//constexpr char valOf(T constant) { return static_cast<char>(constant); } // Writing enum class' variables is within this template function
+enum class pointConstants : int { UP = 0, LEFT = 1, DOWN = 2, RIGHT = 3, TRASH = -1 };
+template <typename T>
+constexpr char valOf(T constant) { return static_cast<char>(constant); } // Writing enum class' variables is within this template function
 
 using std::pair;
 using std::string;
@@ -22,11 +22,8 @@ private:
 	int _y;
 public:
 	// Constructors
-	Point() = default;
-	Point(int x, int y) : _x(x), _y(y) {}
+	Point(int x = valOf(pointConstants::TRASH), int y = valOf(pointConstants::TRASH)) : _x(x), _y(y) {}
 	Point(const Point& point) { *this = point; }
-	Point(Point&& point) noexcept : _x(point.getX()), _y(point.getY()) {}
-	~Point() = default;
 	// Getters
 	int getX() const { return _x; }
 	int getY() const { return _y; }
@@ -39,5 +36,5 @@ public:
 	bool operator==(const Point& coord) const { return (getX() == coord.getX() && getY() == coord.getY()); }
 	bool operator!=(const Point& coord) const { return (getX() != coord.getX() || getY() != coord.getY()); };
 	// Methods
-	void updateCoord(Directions direction);
+	void updateCoord(int direction);
 };
