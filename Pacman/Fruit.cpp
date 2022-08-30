@@ -30,6 +30,7 @@ void Fruit::makeFruitInvisibile()
 {
 	setVisibility(false);
 	_number = 0;
+	setDirection(Directions::TRASH);
 	setCoord({ 0, 0 });
 }
 void Fruit::Reset(const Board& board, const vector<Point>& entities) // Values are irrelevant

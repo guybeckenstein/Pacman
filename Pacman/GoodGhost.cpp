@@ -1,3 +1,4 @@
+#include <queue>
 #include "GoodGhost.h"
 
 // Movement Methods
@@ -9,7 +10,7 @@ bool GoodGhost::Move(const pair<Tunnel, Tunnel>& tunnels, const Board& board, bo
 	setCounter(getCounter() + 1);
 	if (getIsBest() == true)
 	{
-		if (getCounter() % valOf(GoodGhostConstants::SMART_COUNTER) == 0)
+		if (getCounter() % static_cast<int>(GoodGhostConstants::SMART_COUNTER) == 0)
 		{
 			setIsBest(false);
 			setCounter(0);
@@ -18,33 +19,32 @@ bool GoodGhost::Move(const pair<Tunnel, Tunnel>& tunnels, const Board& board, bo
 		if (isNewCoord == true)
 		{
 			if (pointToUpdate.getY() == getCoord().getY() - 1)
-				setDirection(valOf(pointConstants::UP)); // Can go UP
+				setDirection(Directions::UP); // Can go UP
 			else if (pointToUpdate.getX() == getCoord().getX() - 1)
-				setDirection(valOf(pointConstants::LEFT)); // Can go LEFT
+				setDirection(Directions::LEFT); // Can go LEFT
 			else if (pointToUpdate.getY() == getCoord().getY() + 1)
-				setDirection(valOf(pointConstants::DOWN)); // Can go DOWN
+				setDirection(Directions::DOWN); // Can go DOWN
 			else
-				setDirection(valOf(pointConstants::RIGHT)); // Can go RIGHT
+				setDirection(Directions::RIGHT); // Can go RIGHT
 			setCoord(pointToUpdate);
 		}
 	}
 	if (getIsBest() == false || isNewCoord == false) // Using isNewCoord boolean value for "better" gameplay (when running pacman_c.screen, there is at least one ghost who can not reach pacman)
 	{
-		if (getCounter() % valOf(GoodGhostConstants::NOVICE_COUNTER) == 0)
+		if (getCounter() % static_cast<int>(GoodGhostConstants::NOVICE_COUNTER) == 0)
 		{
 			setIsBest(true);
 			setCounter(0);
 		}
-		int tmpDirection;
-		vector<bool> newPossibleDirections;
-		newPossibleDirections.resize(valOf(entityConstants::NUM_OF_ARROWKEYS));
-		bool isNewDirections = getPossibleDirections(tunnels, board, _possibleDirections, newPossibleDirections, getDirection(), pointToUpdate);
-		if (isNewDirections == true || getCounter() % valOf(entityConstants::CHANGE_DIRECTION) == 0)
+		Directions tmpDirection;
+		map<Directions, bool> newPossibleDirections;
+		bool isNewDirections = getPossibleDirections(tunnels, board, newPossibleDirections, getDirection(), pointToUpdate);
+		if (isNewDirections == true || getCounter() % static_cast<int>(entityConstants::CHANGE_DIRECTION) == 0)
 		{
-			if (getCounter() % valOf(entityConstants::CHANGE_DIRECTION) == 0)
-				_possibleDirections[getDirection()] = false;
+			if (getCounter() % static_cast<int>(entityConstants::CHANGE_DIRECTION) == 0)
+				_nextDirectionsPossible.find(getDirection())->second = false;
 			tmpDirection = getDirection();
-			getNextDirection(_possibleDirections, tmpDirection);
+			getNextDirection(tmpDirection);
 			if (tmpDirection != getDirection())
 				setCounter(0);
 			setDirection(tmpDirection);
@@ -56,6 +56,48 @@ bool GoodGhost::Move(const pair<Tunnel, Tunnel>& tunnels, const Board& board, bo
 	return true; // Irrelevant
 }
 
+<<<<<<< HEAD
+=======
+void GoodGhost::BFS(const Board& board, Point& newCoord, bool& isNewCoord) const // Only in case there is a direct shorter route to pacman, Function returns a new coordinator
+{
+	vector<vector<bool>> visitArr(board.getHeight(), vector<bool>(board.getWidth(), false));
+	visitArr[getTargetCoord().getY()][getTargetCoord().getX()] = true; // Marks current target's (Pac-Man) coordinator as visited
+	queue<Point> coordQueue; // Includes all coordinators from ghost's current location until it reaches its target - Pac-Man
+	coordQueue.push(getTargetCoord());
+	while (coordQueue.empty() == false && isNewCoord == false)
+	{
+		int currX = coordQueue.front().getX(), currY = coordQueue.front().getY();
+		coordQueue.pop();
+		vector<Point> adjacentArr;
+		adjacentArr.push_back({ currX , currY - 1 }); // UP adjacent
+		adjacentArr.push_back({ currX - 1 , currY }); // LEFT adjacent
+		adjacentArr.push_back({ currX , currY + 1 }); // DOWN adjacent
+		adjacentArr.push_back({ currX + 1 , currY }); // RIGHT adjacent
+		for (int i = 0; i < adjacentArr.size() && isNewCoord == false; i++)
+		{
+			if (getCoord() == adjacentArr[i])
+			{
+				newCoord.setX(currX);
+				newCoord.setY(currY);
+				isNewCoord = true;
+			}
+			else if (isNextCellPossible(visitArr, board, adjacentArr[i].getX(), adjacentArr[i].getY()) == true)
+			{
+				coordQueue.push({ adjacentArr[i].getX(), adjacentArr[i].getY() }); // New current coorddinator
+				visitArr[adjacentArr[i].getY()][adjacentArr[i].getX()] = true; // Marks current target's (Pac-Man) coordinator as visited
+			}
+		}
+	}
+}
+// Validates the current cell
+bool GoodGhost::isNextCellPossible(const vector<vector<bool>> visitArr, const Board& board, int adjacentX, int adjacentY) const
+{
+	if (adjacentX >= board.getWidth() || adjacentY >= board.getHeight() || adjacentX == 0 || adjacentY == 0 || board.isWall(adjacentX, adjacentY) == true || visitArr[adjacentY][adjacentX] == true)
+		return false;
+	return true;
+}
+
+>>>>>>> f3a2e9a97bb00a5af3d781ff1083155583228d28
 void GoodGhost::Reset(const Point& coord)
 {
 	resetMovement();

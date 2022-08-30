@@ -7,12 +7,13 @@ enum class ghostConstants : int { FIGURE = '$', MOVEMENT_FREQUENCY = 2, MAX_GHOS
 
 class Ghost : public Entity
 {
-private:
 public:
-	Ghost(int x, int y, int movementFrequency = valOf(ghostConstants::MOVEMENT_FREQUENCY)) : Entity(movementFrequency, x, y) { }
+	Ghost(int x, int y, int movementFrequency = static_cast<int>(ghostConstants::MOVEMENT_FREQUENCY)) : Entity(movementFrequency, x, y) { }
 	// Destructor
-	virtual ~Ghost() {} // No actual memory allocation
+	virtual ~Ghost() { } // No actual memory allocation
+	// Setters
+	virtual bool setTargetCoord(const Point& coord) = 0;
 	// Methods
-	void Render(std::ostream& os) const override { os << valOf(ghostConstants::FIGURE); }
-	void Reset(const Point& coord) = 0;
+	void Render(std::ostream& os) const override { os << static_cast<char>(ghostConstants::FIGURE); }
+	virtual void Reset(const Point& coord) = 0;
 };
