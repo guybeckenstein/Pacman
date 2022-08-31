@@ -15,4 +15,7 @@ public:
 	// Methods
 	void Render(std::ostream& os) const override { os << valOf(ghostConstants::FIGURE); }
 	void Reset(const Point& coord) = 0;
+protected:
+	// Movement Methods
+	const Point& makeRegularMovement(const pair<Tunnel, Tunnel>& tunnels, const Board& board, Point& pointToUpdate);
 };

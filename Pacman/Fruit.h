@@ -27,4 +27,3 @@ private:
 	void Render(std::ostream& os) const override { os << getNumber(); }
 	void setVisibility(bool value) { _isVisible = value; }
 };
-

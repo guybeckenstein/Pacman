@@ -12,11 +12,11 @@ public:
 	// Setters
 	void setTargetCoord(const Point& coord) { _pacmanTarget = coord; }
 	// Movement Methods
-	void BFS(const Board& board, const Point& oldCoord, Point& newCoord, bool& isNewCoord) const;
+	bool BFS(const Board& board, const Point& oldCoord, Point& newCoord) const;
 private:
 	// Getters
 	const Point& getTargetCoord() const { return _pacmanTarget; }
 	// Movement Methods
-	const vector<int> getNewIntegerOfDirectionsVector() const;
+	vector<int> getNewIntegerOfDirectionsVector() const;
 	bool isNextCellPossible(const vector<vector<bool>> visitArr, const Board& board, int adjacentX, int adjacentY) const;
 };
